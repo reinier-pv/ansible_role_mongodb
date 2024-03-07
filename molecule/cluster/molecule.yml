@@ -16,49 +16,63 @@ verifier:
 platforms:
   - name: test-multi-01
     hostname: test-multi-01
-    image: robertdebock/rockylinux
-    pull: true
+    image: rockylinux:8-systemd
+    pull: false
     command: "/usr/sbin/init"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    tmpfs:
-      - /run
-      - /tmp
-    tty: true
+    # volumes:
+    #   - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    # tmpfs:
+    #   - /run
+    #   - /tmp
+    # tty: true
+    privileged: true
     environment:
       container: docker
     pre_build_image: true
+    etc_hosts: "{'test-multi-02': '10.3.1.6', 'test-multi-03': '10.3.1.7'}"
+    docker_networks:
+      - name: test_network
+        ipam_config:
+          - subnet: '10.3.1.0/24'
+            gateway: '10.3.1.254'
     networks:
       - name: test_network
+        ipv4_address: '10.3.1.5'
   - name: test-multi-02
     hostname: test-multi-02
-    image: robertdebock/rockylinux
-    pull: true
+    image: rockylinux:8-systemd
+    pull: false
     command: "/usr/sbin/init"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    tmpfs:
-      - /run
-      - /tmp
-    tty: true
+    # volumes:
+    #   - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    # tmpfs:
+    #   - /run
+    #   - /tmp
+    # tty: true
+    privileged: true
     environment:
       container: docker
     pre_build_image: true
+    etc_hosts: "{'test-multi-01': '10.3.1.5', 'test-multi-03': '10.3.1.7'}"
     networks:
       - name: test_network
+        ipv4_address: '10.3.1.6'
   - name: test-multi-03
     hostname: test-multi-03
-    image: robertdebock/rockylinux
-    pull: true
+    image: rockylinux:8-systemd
+    pull: false
     command: "/usr/sbin/init"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    tmpfs:
-      - /run
-      - /tmp
-    tty: true
+    # volumes:
+    #   - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    # tmpfs:
+    #   - /run
+    #   - /tmp
+    # tty: true
+    privileged: true
     environment:
       container: docker
     pre_build_image: true
+    etc_hosts: "{'test-multi-01': '10.3.1.5', 'test-multi-02': '10.3.1.6'}"
     networks:
       - name: test_network
+        ipv4_address: '10.3.1.7'

@@ -1,2 +1,2 @@
 ---
-mongo_replication_role: arbiter
+mongo_replication_role: primary

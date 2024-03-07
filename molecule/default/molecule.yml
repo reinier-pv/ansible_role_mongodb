@@ -16,15 +16,15 @@ verifier:
 platforms:
   - name: test-multi-01
     hostname: test-multi-01
-    image: robertdebock/rockylinux
-    pull: true
+    image: rockylinux:8-systemd
+    pull: false
     command: "/usr/sbin/init"  # to use systemd
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    tmpfs:
-      - /run
-      - /tmp
-    tty: true
+    # volumes:
+    #   - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    # tmpfs:
+    #   - /run
+    #   - /tmp
+    # tty: true
     privileged: true
     environment:
       container: docker

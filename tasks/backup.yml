@@ -9,6 +9,11 @@
     - hostvars[item].mongo_replication_role == 'secondary'
   run_once: true
 
+- name: backup | install cronie if not exist
+  dnf:
+    name: cronie
+    state: present
+
 - block:
 
     - name: backup | ensure backup path exists

@@ -14,7 +14,7 @@
       {{- (mongo_edition == 'enterprise') | ternary('com', 'org') -}}
       /yum/redhat/$releasever/mongodb-
       {{- mongo_edition }}/
-      {{- mongo_version }}/x86_64/
+      {{- mongo_version }}/{{ ansible_architecture }}/
     enabled: true
     gpgcheck: true
     gpgkey: https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc

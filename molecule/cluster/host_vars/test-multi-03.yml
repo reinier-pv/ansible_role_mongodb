@@ -1,2 +1,2 @@
 ---
-mongo_replication_role: primary
+mongo_replication_role: secondary

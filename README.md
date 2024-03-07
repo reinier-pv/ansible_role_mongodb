@@ -1,6 +1,6 @@
 # MongoDB
 
-An Ansible role that installs, configures and manages MongoDB for EL 8.  
+An Ansible role that installs, configures and manages MongoDB for Rocky Linux 8.  
 A role for Ubuntu can be [found here](https://github.com/csuka/ansible_role_mongodb_ubuntu).
 
 **Please read this file carefully before deploying this Ansible role**
@@ -382,7 +382,7 @@ I have tried configuring this countless amount of times, but always failed due t
         password: 12345
         state: present
         update_password: on_create    
-  pre_tasks:
+  # pre_tasks:
     # ensure this is done
     # - name: ensure hosts can connect to each other via hostnames
     #   template:

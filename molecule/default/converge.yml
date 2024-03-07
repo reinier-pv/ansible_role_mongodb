@@ -2,4 +2,4 @@
 - name: Converge
   hosts: test-multi-01
   roles:
-    - ../ansible_role_mongodb
+    - /Users/reinier/development/ansible/roles/ansible_role_mongodb

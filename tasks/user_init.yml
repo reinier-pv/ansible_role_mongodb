@@ -7,10 +7,11 @@
     group: root
     mode: '0644'
 
-- name: user_init | start mongo
+- name: user_init | ensure mongod is started and enabled
   service:
     name: mongod
     state: started
+    enabled: true
 
 - name: user_init | create users admin, adminuser and backup
   community.mongodb.mongodb_user:
@@ -20,7 +21,7 @@
     roles: "{{ item.role }}"
     login_host: 127.0.0.1
     login_port: "{{ mongo_net.port }}"
-  no_log: true
+  # no_log: true
   loop:
     - name: admin
       pass: "{{ mongo_admin_pass }}"
