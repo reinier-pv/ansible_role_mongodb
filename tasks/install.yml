@@ -12,12 +12,12 @@
     baseurl: >-
       https://repo.mongodb.
       {{- (mongo_edition == 'enterprise') | ternary('com', 'org') -}}
-      /yum/redhat/$releasever/mongodb-
+      /yum/redhat/9/mongodb-
       {{- mongo_edition }}/
       {{- mongo_version }}/{{ ansible_architecture }}/
     enabled: true
     gpgcheck: true
-    gpgkey: https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc
+    gpgkey: https://pgp.mongodb.com/server-{{ mongo_version }}.asc
   when: mongo_repo
 
 - name: install | group mongod

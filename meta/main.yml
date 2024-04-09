@@ -9,7 +9,7 @@ galaxy_info:
   platforms:
     - name: Rocky
       versions:
-        - 8
+        - 9.0
   galaxy_tags:
     - database
     - mongodb

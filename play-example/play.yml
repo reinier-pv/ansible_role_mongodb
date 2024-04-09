@@ -1,0 +1,20 @@
+---
+# required for fact gathering, ipv4 address
+- name: Add ip and hostnames to nodes /etc/hosts
+  hosts: cluster-pss
+  become: true
+  tasks:
+    - name: set /etc/hosts file
+      template:
+        src: hosts.j2
+        dest: /etc/hosts
+        mode: '0644'
+        owner: root
+        group: root
+
+- name: Create mongodb cluster
+  hosts: cluster-pss
+  any_errors_fatal: true
+  become: true
+  roles:
+    - /Users/reinier/development/ansible/roles/ansible_role_mongodb

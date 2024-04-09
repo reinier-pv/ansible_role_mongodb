@@ -1,8 +1,8 @@
 ---
 mongo_repo: true
-mongo_version: 5.0
+mongo_version: 7.0
 mongo_edition: org  # org or enterprise
-mongo_pymongo_version: 4.1.1
+mongo_pymongo_version: 4.6.3
 
 # Apply production recommendations, see readme
 mongo_thp: true
@@ -26,8 +26,8 @@ mongo_systemlog:
 
 mongo_storage:
   dbPath: /var/lib/mongo
-  journal:
-    enabled: true
+# journal:
+#   enabled: true
 
 # You should not change the pidfile location
 mongo_processmanagement:

@@ -1,7 +1,13 @@
 ---
+- name: cluster | ensure mongod is started and enabled
+  service:
+    name: mongod
+    state: started
+    enabled: true
+
 - name: cluster | check if hosts are in clustered
   shell: >-
-    mongo --port {{ mongo_net.port }} --quiet --eval 'db.isMaster().hosts'
+    mongosh --port {{ mongo_net.port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
   changed_when: false
 
@@ -71,6 +77,10 @@
       secondary: 2
       arbiter: 1
 
+- name: Print fact members
+  debug:
+    var: members
+
 - name: cluster | set fact for arbiter index number
   set_fact:
     arbiter_index: "{{ hostid }}"
@@ -98,6 +108,10 @@
       service:
         name: mongod
         state: restarted
+
+    - name: cluster | wait a few seconds
+      pause:
+        seconds: 30
 
     - name: cluster | initial build
       community.mongodb.mongodb_replicaset:

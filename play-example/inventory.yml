@@ -1,0 +1,9 @@
+---
+cluster-pss:
+  hosts:
+    mongodb01prodv:
+      ansible_host: 10.213.2.220
+    mongodb02prodv:
+      ansible_host: 10.213.2.221
+    mongodb03prodv:
+      ansible_host: 10.213.2.222
