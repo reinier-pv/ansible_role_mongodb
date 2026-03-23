@@ -4,7 +4,7 @@ ansible_user: sistemas
 mongo_restart_config: true
 mongo_restart_seconds: 5
 
-mongo_thp: false
+mongo_thp: true
 mongo_numa: false
 
 mongo_replication:

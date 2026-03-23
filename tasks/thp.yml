@@ -51,3 +51,10 @@
   service:
     name: disable-transparent-hugepages
     enabled: true
+
+- name: thp | set vm.max_map_count to recomended value
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^vm.max_map_count='
+    line: vm.max_map_count=128000
+    state: present
