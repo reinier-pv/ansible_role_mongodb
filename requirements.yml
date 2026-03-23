@@ -1,0 +1,4 @@
+# from GitLab or other git-based scm
+- src: https://gitlab.imm.gub.uy/sistemas/provisioning/ansible-roles/mongodb-rockyl.git
+  scm: git
+  version: main

@@ -1,0 +1,37 @@
+variables:
+  SERVER_LIST:
+    value: ""
+    description: "Listado de servidores separados por comas, con dirección ip o nombre de host. Ej: 10.0.0.10,server99prodv.imm.gub.uy"
+  DOCKER_USER:
+    value: ""
+    description: "Usuario que será adicionado al grupo de docker"
+
+stages:
+  - requirements
+  - configure
+
+requirements:
+  stage: requirements
+  when: manual
+  allow_failure: false
+  needs: []
+  script:
+    - >
+      sed -i "s#https://${GITLAB_HOST}/#https://oauth2:${GTILAB_PAT}@${GITLAB_HOST}/#g" requirements.yml
+
+      ANSIBLE_HOST_KEY_CHECKING=False
+      ansible-galaxy install --force -r requirements.yml
+
+configure:  
+  stage: configure
+  needs: ["requirements"]
+  script:
+    - >
+      LINUX_HOSTS=$(echo "${SERVER_LIST}" | tr -d ' ')
+      ANSIBLE_USER=${ansible_user}
+      ANSIBLE_PASSWORD=${ansible_password}
+      DOCKER_USER=${DOCKER_USER}
+      ANSIBLE_HOST_KEY_CHECKING=False
+      ansible-playbook playbook.yml
+
+
