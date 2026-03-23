@@ -1,7 +1,6 @@
 # MongoDB
 
-An Ansible role that installs, configures and manages MongoDB for Rocky Linux 8.  
-A role for Ubuntu can be [found here](https://github.com/csuka/ansible_role_mongodb_ubuntu).
+An Ansible role that installs, configures and manages MongoDB for Rocky Linux 9.  
 
 **Please read this file carefully before deploying this Ansible role**
 
@@ -37,7 +36,7 @@ The version and edition can be set. By default, the official mongodb repository 
 
 ```yaml
 mongo_repo: true
-mongo_version: 5.0
+mongo_version: 7.0
 mongo_edition: org  # or enterprise
 ```
 
@@ -324,7 +323,7 @@ If a replication set is active, the cluster should be maintained after the updat
 
 ### Updating a sharded environment
 
-In development.
+WIP
 
 ## Development
 
@@ -332,16 +331,13 @@ In development.
 
 ### Scaling
 
-Still in development... I am not even sure whenever I'll this functionality, since this is currently not even possible with mongo 5.0.
-It is not easy to configure scaling in mongo with Ansible, since the method is not straight forward.
+WIP
 
 So far, I saw that the steps should be:
 - If arbiter is present in configuration and on system
     - remove arbiter from cluster
 - Add new secondary or secondaries
 - Add arbiter if configured
-
-I have tried configuring this countless amount of times, but always failed due to a system error. I decided to not include scaling for now.
 
 # Example playbook
 
