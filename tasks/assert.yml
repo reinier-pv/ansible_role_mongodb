@@ -33,7 +33,7 @@
     that:
       - mongo_admin_pass != 'change_me'
       - mongo_adminuser_pass != 'change_me'
-      - mongo_backup.pass != 'change_me'
+      - mongo_backup.password != 'change_me'
   
 - block:
 

@@ -37,7 +37,7 @@
     login_password: "{{ mongo_admin_pass }}"
     database: admin
     name: "{{ mongo_backup.user }}"
-    password: "{{ mongo_backup.pass }}"
+    password: "{{ mongo_backup.password }}"
     roles: backup
     state: present
     update_password: always
@@ -79,7 +79,7 @@
             --port {{ mongo_net.port }}
             --authenticationDatabase admin
             --username '{{ mongo_backup.user }}'
-            --password '{{ mongo_backup.pass }}'
+            --password '{{ mongo_backup.password }}'
             && ln -sf
             {{ mongo_backup.path }}/mongo_backup_$(date '+\\%Y-\\%m-\\%d')
             {{ mongo_backup.path }}/latest ; done"

@@ -30,5 +30,5 @@
       pass: "{{ mongo_adminuser_pass }}"
       role: userAdminAnyDatabase
     - name: "{{ mongo_backup.user }}"
-      pass: "{{ mongo_backup.pass }}"
+      password: "{{ mongo_backup.password }}"
       role: backup

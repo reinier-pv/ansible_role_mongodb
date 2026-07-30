@@ -70,7 +70,7 @@ mongo_backup:
     - config
     - local
   user: backup
-  pass: change_me
+  password: change_me
   path: /var/lib/mongo_backups
   owner: mongod
   group: mongod
