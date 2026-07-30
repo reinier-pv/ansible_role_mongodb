@@ -1,4 +1,16 @@
 ---
+- name: backup | set host_count if not already defined
+  set_fact:
+    host_count: "{{ ansible_play_hosts | length }}"
+  when: host_count is undefined
+  tags: backup
+
+- name: backup | set mongo_primary if not already defined
+  set_fact:
+    mongo_primary: "{{ mongo_replication_role == 'primary' }}"
+  when: mongo_primary is undefined
+  tags: backup
+
 - name: backup | set fact for first secondary in play
   set_fact:
     backup_on_host: "{{ item }}"
@@ -15,6 +27,24 @@
     name: cronie
     state: present
   tags: backup
+
+- name: backup | ensure backup user exists with correct password
+  community.mongodb.mongodb_user:
+    login_host: localhost
+    login_port: "{{ mongo_net.port }}"
+    login_database: admin
+    login_user: admin
+    login_password: "{{ mongo_admin_pass }}"
+    database: admin
+    name: "{{ mongo_backup.user }}"
+    password: "{{ mongo_backup.pass }}"
+    roles: backup
+    state: present
+    update_password: always
+  tags: backup
+  when: >-
+    host_count == '1' or
+    mongo_primary
 
 - block:
     - name: backup | ensure backup path exists

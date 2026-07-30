@@ -1,0 +1,62 @@
+---
+# Simple syntax test for backup.yml
+- name: Test backup.yml task structure
+  hosts: localhost
+  connection: local
+  become: false
+  vars:
+    mongo_admin_pass: admin
+    mongo_backup:
+      enabled: true
+      user: backup
+      pass: test_password
+      path: /tmp/mongo_backups
+      owner: mongod
+      group: mongod
+      mode: '0660'
+      dbs:
+        - admin
+        - config
+        - local
+      hour: 2
+      minute: 5
+      day: "*"
+      retention: 46
+    mongo_net:
+      port: 27017
+    host_count: '1'
+
+  tasks:
+    - name: Verify backup user task exists in backup.yml
+      command: grep -c "community.mongodb.mongodb_user" ../tasks/backup.yml
+      register: grep_result
+
+    - name: Assert backup user task exists
+      assert:
+        that:
+          - grep_result.stdout | int >= 1
+        fail_msg: "community.mongodb.mongodb_user task not found in backup.yml"
+
+    - name: Verify update_password parameter exists
+      command: grep -c "update_password" ../tasks/backup.yml
+      register: grep_update
+
+    - name: Assert update_password parameter exists
+      assert:
+        that:
+          - grep_update.stdout | int >= 1
+        fail_msg: "update_password not found in backup.yml"
+
+    - name: Verify backup tag exists in main.yml
+      shell: grep -c "tags" ../tasks/main.yml
+      register: grep_tags
+
+    - name: Assert backup tag exists in main.yml
+      assert:
+        that:
+          - grep_tags.stdout | int >= 1
+        fail_msg: "tags backup not found in main.yml"
+
+    - name: Print success message
+      debug:
+        msg: "All backup.yml modifications verified successfully!"

@@ -1,0 +1,28 @@
+---
+- name: Phase 3 - Password rotation test
+  hosts:
+    - test-multi-01
+    - test-multi-02
+    - test-multi-03
+  any_errors_fatal: true
+  vars:
+    mongo_backup:
+      enabled: true
+      dbs:
+        - admin
+        - config
+        - local
+      user: backup
+      pass: rotated_password
+      path: /var/lib/mongo_backups
+      owner: mongod
+      group: mongod
+      mode: '0660'
+      hour: 2
+      minute: 5
+      day: "*"
+      retention: 46
+  tasks:
+    - include_role:
+        name: /Users/reinier/development/ansible/roles/ansible_role_mongodb
+      tags: backup

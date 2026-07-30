@@ -1,0 +1,11 @@
+---
+- name: Phase 2 - Backup only (simulates update_backup CI job)
+  hosts:
+    - test-multi-01
+    - test-multi-02
+    - test-multi-03
+  any_errors_fatal: true
+  tasks:
+    - include_role:
+        name: /Users/reinier/development/ansible/roles/ansible_role_mongodb
+      tags: backup

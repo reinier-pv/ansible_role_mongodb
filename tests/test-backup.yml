@@ -1,0 +1,48 @@
+---
+# Test playbook for backup functionality
+# Usage: ansible-playbook test-backup.yml
+
+- name: Verify backup.yml syntax and logic
+  hosts: localhost
+  connection: local
+  become: false
+  vars:
+    mongo_admin_pass: admin
+    mongo_backup:
+      enabled: true
+      user: backup
+      pass: test_password
+      path: /tmp/mongo_backups
+      owner: mongod
+      group: mongod
+      mode: '0660'
+      dbs:
+        - admin
+        - config
+        - local
+      hour: 2
+      minute: 5
+      day: "*"
+      retention: 46
+    mongo_net:
+      port: 27017
+    host_count: '1'
+    inventory_hostname: localhost
+
+  tasks:
+    - name: Load backup.yml tasks
+      include_tasks: ../tasks/backup.yml
+      vars:
+        backup_on_host: localhost
+
+    - name: Verify backup directory was created
+      stat:
+        path: "{{ mongo_backup.path }}"
+      register: backup_dir
+
+    - name: Assert backup directory exists
+      assert:
+        that:
+          - backup_dir.stat.exists
+          - backup_dir.stat.isdir
+        fail_msg: "Backup directory does not exist"

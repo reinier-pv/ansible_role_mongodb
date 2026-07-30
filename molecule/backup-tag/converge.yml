@@ -1,0 +1,9 @@
+---
+- name: Phase 1 - Full setup
+  hosts:
+    - test-multi-01
+    - test-multi-02
+    - test-multi-03
+  any_errors_fatal: true
+  roles:
+    - /Users/reinier/development/ansible/roles/ansible_role_mongodb

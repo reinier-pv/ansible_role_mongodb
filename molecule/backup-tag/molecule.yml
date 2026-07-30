@@ -1,0 +1,48 @@
+---
+scenario:
+  name: backup-tag
+dependency:
+  name: galaxy
+driver:
+  name: podman
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      host_key_checking: false
+verifier:
+  name: ansible
+platforms:
+  - name: test-multi-01
+    hostname: test-multi-01
+    image: localhost/rocky9-systemd:latest
+    pull: false
+    command: "/usr/sbin/init"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    privileged: true
+    environment:
+      container: podman
+    pre_build_image: true
+  - name: test-multi-02
+    hostname: test-multi-02
+    image: localhost/rocky9-systemd:latest
+    pull: false
+    command: "/usr/sbin/init"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    privileged: true
+    environment:
+      container: podman
+    pre_build_image: true
+  - name: test-multi-03
+    hostname: test-multi-03
+    image: localhost/rocky9-systemd:latest
+    pull: false
+    command: "/usr/sbin/init"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    privileged: true
+    environment:
+      container: podman
+    pre_build_image: true

@@ -59,12 +59,12 @@
       fetch:
         src: "{{ mongo_security.keyFile }}"
         flat: true
-        dest: /tmp/mongo_keyfile
+        dest: "{{ molecule_ephemeral_directory }}/mongo_keyfile"
       delegate_to: "{{ keyfile_host }}"
 
     - name: keyfile | copy required files to remaining hosts
       copy:
-        src: /tmp/mongo_keyfile
+        src: "{{ molecule_ephemeral_directory }}/mongo_keyfile"
         dest: "{{ mongo_security.keyFile }}"
         mode: '0400'
         owner: mongod
@@ -79,12 +79,12 @@
       fetch:
         src: "{{ mongo_security.keyFile }}"
         flat: true
-        dest: /tmp/mongo_keyfile
+        dest: "{{ molecule_ephemeral_directory }}/mongo_keyfile"
       delegate_to: "{{ keyfile_host }}"
 
     - name: keyfile | copy required files to remaining hosts
       copy:
-        src: /tmp/mongo_keyfile
+        src: "{{ molecule_ephemeral_directory }}/mongo_keyfile"
         dest: "{{ mongo_security.keyFile }}"
         mode: '0400'
         owner: mongod
@@ -94,7 +94,7 @@
 
 - name: keyfile | ensure absence from localhost
   file:
-    path: /tmp/mongo_keyfile
+    path: "{{ molecule_ephemeral_directory }}/mongo_keyfile"
     state: absent
   run_once: true
   delegate_to: localhost

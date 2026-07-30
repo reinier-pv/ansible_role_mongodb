@@ -1,0 +1,103 @@
+---
+# Verify backup setup on secondary node (test-multi-02)
+# This is the node where backup should be configured
+
+- name: Verify backup infrastructure
+  hosts: test-multi-02
+  gather_facts: false
+  tasks:
+    - name: check backup directory exists
+      stat:
+        path: /var/lib/mongo_backups
+      register: backup_dir
+
+    - name: assert backup directory exists
+      assert:
+        that: backup_dir.stat.exists
+        fail_msg: "Backup directory /var/lib/mongo_backups does not exist"
+        success_msg: "Backup directory exists"
+
+    - name: check backup directory permissions
+      stat:
+        path: /var/lib/mongo_backups
+      register: backup_dir_stat
+
+    - name: assert backup directory has correct owner
+      assert:
+        that:
+          - backup_dir_stat.stat.pw_name == 'mongod'
+          - backup_dir_stat.stat.gr_name == 'mongod'
+        fail_msg: "Backup directory owner/group is not mongod:mongod"
+        success_msg: "Backup directory owner/group is correct"
+
+- name: Verify cron jobs
+  hosts: test-multi-02
+  gather_facts: false
+  tasks:
+    - name: get cron jobs
+      command: crontab -l
+      register: crontab_output
+      changed_when: false
+      failed_when: false
+
+    - name: assert backup cron job exists
+      assert:
+        that:
+          - "'create backup of mongo' in crontab_output.stdout"
+        fail_msg: "Backup cron job not found"
+        success_msg: "Backup cron job exists"
+
+    - name: assert cleanup cron job exists
+      assert:
+        that:
+          - "'remove mongodb old backup files' in crontab_output.stdout"
+        fail_msg: "Cleanup cron job not found"
+        success_msg: "Cleanup cron job exists"
+
+- name: Verify backup user authentication
+  hosts: test-multi-02
+  gather_facts: false
+  tasks:
+    - name: check backup user can authenticate with initial password
+      command: >
+        mongosh admin --port 27018 --quiet --eval
+        'db.auth("backup", "initial_password")'
+      register: auth_result
+      changed_when: false
+
+    - name: assert backup user authentication works
+      assert:
+        that: "'ok' in auth_result.stdout"
+        fail_msg: "Backup user authentication failed"
+        success_msg: "Backup user authentication successful"
+
+    - name: check backup user has backup role
+      command: >
+        mongosh admin --port 27018 --quiet --eval
+        'db.auth("admin", "something"); db.getUser("backup")'
+      register: user_info
+      changed_when: false
+
+    - name: assert backup user has correct role
+      assert:
+        that:
+          - "'backup' in user_info.stdout"
+        fail_msg: "Backup user does not have backup role"
+        success_msg: "Backup user has correct role"
+
+- name: Verify primary node does NOT have backup cron
+  hosts: test-multi-01
+  gather_facts: false
+  tasks:
+    - name: get cron jobs on primary
+      command: crontab -l
+      register: crontab_output
+      changed_when: false
+      failed_when: false
+
+    - name: assert no backup cron on primary
+      assert:
+        that:
+          - "'create backup of mongo' not in crontab_output.stdout"
+        fail_msg: "Backup cron should NOT exist on primary node"
+        success_msg: "No backup cron on primary (correct)"

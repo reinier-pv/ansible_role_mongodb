@@ -33,3 +33,4 @@
 
 - include_tasks: backup.yml
   when: mongo_backup.enabled
+  tags: backup

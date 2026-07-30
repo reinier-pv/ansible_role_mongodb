@@ -10,6 +10,7 @@
     mongosh --port {{ mongo_net.port }} --quiet --eval 'db.isMaster().hosts'
   register: check_cluster
   changed_when: false
+  failed_when: false
 
 # # Get the replicaset status and then lookup the primary
 #  hostname and save to a variable

@@ -1,0 +1,19 @@
+---
+- name: Prepare - configure /etc/hosts with correct container IPs
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Add /etc/hosts entries to each container
+      shell: |
+        CURRENT="{{ item }}"
+        for container in test-multi-01 test-multi-02 test-multi-03; do
+          ip=$(podman inspect "$container" --format '{{ '{{' }}.NetworkSettings.IPAddress{{ '}}' }}')
+          if [ "$container" != "$CURRENT" ]; then
+            podman exec "$CURRENT" bash -c "grep -q '$container' /etc/hosts || echo '$ip $container' >> /etc/hosts"
+          fi
+        done
+      loop:
+        - test-multi-01
+        - test-multi-02
+        - test-multi-03
+      changed_when: false

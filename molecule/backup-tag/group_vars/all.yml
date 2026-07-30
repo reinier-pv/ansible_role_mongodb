@@ -41,7 +41,7 @@ mongo_backup:
     - config
     - local
   user: backup
-  pass: something
+  pass: initial_password
   path: /var/lib/mongo_backups
   owner: mongod
   group: mongod
@@ -49,4 +49,4 @@ mongo_backup:
   hour: 2
   minute: 5
   day: "*"
-  retention: 46  # in hours
+  retention: 46
